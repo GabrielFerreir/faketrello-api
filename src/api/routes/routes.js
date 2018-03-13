@@ -10,10 +10,10 @@ module.exports = (app) => {
 };
 
 routes = {
-    // participante: {
-    //     selecionarPorEmail: {
-    //         method: 'GET',
-    //         url: `${global.config.api.azureBootcamp.host}:${global.config.api.azureBootcamp.port}/participante`
-    //     },
-    // }
+    user: {
+        create: {
+            method: 'POST',
+            url: `${global.config.api.host}:${global.config.api.port}/user`
+        },
+    }
 }
