@@ -45,10 +45,17 @@ async function insertImg(base64, prefix, path) {
 
 async function remove(path) {
     return new Promise((resolve, reject) => {
-        fs.unlink(path, (err) => {
-           if(err)
-               reject(err);
-           resolve();
-        });
+        if (fs.existsSync(path)) {
+            fs.unlink(path, (err) => {
+                if (err)
+                    reject(err);
+                resolve();
+            });
+        } else {
+            reject({
+                httpCode: 404,
+                message: 'Arquivo não encontrado'
+            });
+        }
     });
 }

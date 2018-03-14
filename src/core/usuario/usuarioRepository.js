@@ -63,6 +63,7 @@ async function change(params) {
         params.name,
         params.email,
         params.pass,
+        params.removed,
         params.image
     ]);
 

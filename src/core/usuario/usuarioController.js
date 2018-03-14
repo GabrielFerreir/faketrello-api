@@ -4,7 +4,6 @@ const Validator = require('./../../api/validator/validator');
 const helperImages = require('../../helpers/images');
 
 
-
 module.exports = {
     insert,
     change,
@@ -50,7 +49,7 @@ async function change(req, res) {
         email: req.body.email,
         pass: req.body.pass,
         image: req.body.image,
-        removed: req.body.removed
+        removed: req.body.removed || false
     };
     let validator = new Validator();
 
@@ -68,20 +67,26 @@ async function change(req, res) {
     }
     try {
         const oldPath = await repository.verifyChangeEmail(params);
-        if(params.image) {
-            helperImages.remove(`images/${oldPath.path}`);
+        if (params.image) {
+
+            if (oldPath.path)
+                await helperImages.remove(`images/${oldPath.path}`);
+
             params.image = await helperImages.insertImg(params.image, 'user_', 'images/');
-        } else if(!params.image && params.removed) {
-            helperImages.remove(`images/${oldPath.path}`);
+        } else if (!params.image && params.removed) {
+            if (oldPath.path)
+                await helperImages.remove(`images/${oldPath.path}`);
         }
-        repository.change(params);
+        await repository.change(params);
         return res.finish({
             message: 'Usuario alterado com sucesso'
         });
 
-
-    } catch (e) {
-
+    } catch (error) {
+        return res.finish({
+            httpCode: error.httpCode || 500,
+            error
+        });
     }
 }
 
