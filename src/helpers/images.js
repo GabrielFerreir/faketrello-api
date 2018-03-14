@@ -1,7 +1,8 @@
 const fs = require('fs');
 
 module.exports = {
-    insertImg
+    insertImg,
+    remove
 };
 
 async function insertImg(base64, prefix, path) {
@@ -39,5 +40,15 @@ async function insertImg(base64, prefix, path) {
             }
             resolve(name);
         });
-    })
+    });
+}
+
+async function remove(path) {
+    return new Promise((resolve, reject) => {
+        fs.unlink(path, (err) => {
+           if(err)
+               reject(err);
+           resolve();
+        });
+    });
 }
