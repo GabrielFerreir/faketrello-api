@@ -71,13 +71,10 @@ async function change(req, res) {
         if(params.image) {
             helperImages.remove(`images/${oldPath.path}`);
             params.image = await helperImages.insertImg(params.image, 'user_', 'images/');
-            repository.change(params)
         } else if(!params.image && params.removed) {
-            console.log(params);
             helperImages.remove(`images/${oldPath.path}`);
-            repository.change(params)
-
         }
+        repository.change(params);
         return res.finish({
             message: 'Usuario alterado com sucesso'
         });
