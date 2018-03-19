@@ -15,5 +15,9 @@ routes = {
             method: 'POST',
             url: `${global.config.api.host}:${global.config.api.port}/user`
         },
+        change: {
+            method: 'PUT',
+            url: `${global.config.api.host}:${global.config.api.port}/user`
+        }
     }
-}
+};
