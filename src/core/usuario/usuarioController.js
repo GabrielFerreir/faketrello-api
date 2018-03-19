@@ -2,11 +2,13 @@ const repository = require('./usuarioRepository');
 const Validator = require('./../../api/validator/validator');
 
 const helperImages = require('../../helpers/images');
+const auth = require('../../auth/auth');
 
 
 module.exports = {
     insert,
     change,
+    createToken
 };
 
 async function insert(req, res) {
@@ -88,6 +90,37 @@ async function change(req, res) {
             error
         });
     }
+}
+
+async function createToken(req, res) {
+    const params = {
+        email: req.body.email,
+        pass: req.body.pass
+    };
+    let validator = new Validator();
+    validator.isRequired(params.email, 'Email é requirido');
+    validator.isRequired(params.pass, 'Senha é requirida');
+    if (!validator.isValid()) {
+        return res.finish({
+            httpCode: 400,
+            error: validator.errors()
+        });
+    }
+    try{
+        const token = await auth.generateToken(params);
+        console.log(token);
+
+        return res.finish({
+            teste: 'A',
+            token: token
+        });
+    } catch(error) {
+        return res.finish({
+            httpCode: error.httpCode || 500,
+            error
+        });
+    }
+
 }
 
 
