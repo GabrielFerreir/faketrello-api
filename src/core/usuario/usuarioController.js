@@ -100,6 +100,7 @@ async function createToken(req, res) {
     let validator = new Validator();
     validator.isRequired(params.email, 'Email é requirido');
     validator.isRequired(params.pass, 'Senha é requirida');
+    console.log(validator.isValid());
     if (!validator.isValid()) {
         return res.finish({
             httpCode: 400,
@@ -108,12 +109,13 @@ async function createToken(req, res) {
     }
     try{
         const token = await auth.generateToken(params);
-        console.log(token);
-
         return res.finish({
-            teste: 'A',
-            token: token
+            content: {
+                token: token
+            },
+            message: 'OK'
         });
+
     } catch(error) {
         return res.finish({
             httpCode: error.httpCode || 500,
