@@ -107,7 +107,8 @@ async function createToken(req, res) {
         });
     }
     try{
-        await repository.generateToken(params);
+        const generateToken = await repository.generateToken(params);
+        params.id = generateToken.id;
         const token = await auth.generateToken(params);
         return res.finish({
             content: {

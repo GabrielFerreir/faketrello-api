@@ -88,4 +88,5 @@ async function generateToken(params) {
     }
     if (error)
         throw error;
+    return data;
 }
