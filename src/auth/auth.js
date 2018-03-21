@@ -6,7 +6,7 @@ exports.generateToken = async (data) => {
 };
 
 exports.decodeToken = async (token) => {
-    let data = await jwt.verify(token, KEY);
+    const data = await jwt.verify(token, KEY);
     return data;
 };
 
