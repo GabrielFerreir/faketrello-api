@@ -3,8 +3,7 @@ module.exports = {
     verifyEmail,
     insert,
     verifyChangeEmail,
-    change,
-    generateToken
+    change
 };
 
 async function verifyEmail(email) {
@@ -74,19 +73,3 @@ async function change(params) {
         throw error;
 }
 
-async function generateToken(params) {
-    const data = await db.json('generateToken', [
-        params.email,
-        params.pass
-    ]);
-    let error;
-    switch (data.executionCode) {
-        case 1:
-            error = data;
-            error.httpCode = 409;
-            break;
-    }
-    if (error)
-        throw error;
-    return data;
-}
