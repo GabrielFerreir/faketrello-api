@@ -13,7 +13,7 @@ exports.decodeToken = async (token) => {
 };
 
 exports.authorize = (req, res, next) => {
-  let token = req.body.token || req.query.token || req.headers['x-access-token'];
+  let token = req.body.token || req.query.token || req.headers['authentication'];
 
   if(!token) {
       return res.finish({
@@ -66,4 +66,5 @@ exports.createToken = async (req, res) => {
             error
         });
     }
-}
+};
+

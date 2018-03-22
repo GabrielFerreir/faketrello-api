@@ -2,6 +2,8 @@ const repository = require('./usuarioRepository');
 const Validator = require('./../../api/validator/validator');
 const helperImages = require('../../helpers/images');
 
+const authController = require('../../auth/authController');
+
 
 module.exports = {
     insert,
@@ -42,8 +44,11 @@ async function insert(req, res) {
 }
 
 async function change(req, res) {
+    const token = req.body.token || req.query.token || req.headers['authentication'];
+    let tokenDecode = await authController.decodeToken(token);
+
     const params = {
-        id: req.body.id,
+        id: tokenDecode.id,
         name: req.body.name,
         email: req.body.email,
         pass: req.body.pass,
