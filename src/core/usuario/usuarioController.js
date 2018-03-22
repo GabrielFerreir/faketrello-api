@@ -7,7 +7,8 @@ const authController = require('../../auth/authController');
 
 module.exports = {
     insert,
-    change
+    change,
+    remove
 };
 
 async function insert(req, res) {
@@ -72,7 +73,6 @@ async function change(req, res) {
     try {
         const oldPath = await repository.verifyChangeEmail(params);
         if (params.image) {
-
             if (oldPath.path)
                 await helperImages.remove(`images/${oldPath.path}`);
 
@@ -92,6 +92,34 @@ async function change(req, res) {
             error
         });
     }
+}
+
+async function remove(req, res) {
+    const token = req.body.token || req.query.token || req.headers['authentication'];
+    let tokenDecode = await authController.decodeToken(token);
+    const params = {id: tokenDecode.id};
+    let validator = new Validator();
+    validator.isRequired(params.id, 'Id é requirido');
+    if (!validator.isValid()) {
+        return res.finish({
+            httpCode: 400,
+            error: validator.errors()
+        });
+    }
+    try {
+        let data = await repository.removeUser(params);
+        if(data.image)
+            await helperImages.remove(`images/${data.image}`);
+        return res.finish({
+            message: 'Usuario deletado com sucesso'
+        });
+    } catch(error) {
+        return res.finish({
+            httpCode: error.httpCode || 500,
+            error
+        });
+    }
+
 }
 
 

@@ -5,4 +5,6 @@ module.exports = (app) => {
     app.route('/user').post(user.insert);
 
     app.route('/user').put(authController.authorize, user.change);
+
+    app.route('/user').delete(authController.authorize, user.remove);
 };

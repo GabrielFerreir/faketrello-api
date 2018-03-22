@@ -3,7 +3,8 @@ module.exports = {
     verifyEmail,
     insert,
     verifyChangeEmail,
-    change
+    change,
+    removeUser
 };
 
 async function verifyEmail(email) {
@@ -69,7 +70,37 @@ async function change(params) {
 
     let error;
 
+    switch (data.executionCode) {
+        case 1:
+            error = data;
+            error.httpCode = 404;
+            break;
+        case 2:
+            error = data;
+            error.httpCode = 409;
+            break;
+    }
+
     if (error)
         throw error;
+}
+
+async function removeUser(params) {
+    let data = await db.json('removeUser', [
+        params.id
+    ]);
+
+    let error;
+
+    switch (data.executionCode) {
+        case 1:
+            error = data;
+            error.httpCode = 404;
+            break;
+    }
+
+    if (error)
+        throw error;
+    return data;
 }
 
